@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 def ask(questionText, answerTypeAllowed = 0, allowedAnswers = None, acceptedAnswerText = "Answer accepted.", typeErrorText = "Your answer was of the wrong type.", badAnswerText = "Your answer was not one of the allowed answers.", genericErrorText = "An error occured.", defaultAnswer = None):
     """
     Ask a question on the command line.
@@ -79,8 +81,8 @@ def ask(questionText, answerTypeAllowed = 0, allowedAnswers = None, acceptedAnsw
                     badAnswer()
                     continue
             elif answerTypeAllowed == 4:
-                if str(userInput).lower() in ['y', 'n', 'yes', 'no', '0', '1', 'true', 'false']:
-                    if str(userInput).lower() in ['y', 'yes', '1', 'true']:
+                if str(userInput).lower() in ['y', 'n', 'yes', 'no', '0', '1', 'true', 'false', 'affirmative', 'positive', 'negative', 'affirmation', 'affirmed']:
+                    if str(userInput).lower() in ['y', 'yes', '1', 'true', 'positive', 'affirmative', 'affirmation', 'affirmed']:
                         if acceptedAnswerText: print(acceptedAnswerText)
                         return True
                     else:
