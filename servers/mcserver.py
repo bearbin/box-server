@@ -17,7 +17,7 @@ class Server():
     def start(self):
         """Starts the server."""
         if self.started == 1:
-            return
+            raise OperationFailedExcepion({"operation":"start", "cause":"alreadystarted"})
         else:
             self.serverprocess = subprocess.Popen([self.filename], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
             self.started = 1
