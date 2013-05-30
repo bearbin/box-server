@@ -30,7 +30,7 @@ class Server():
         else:
             output = self.serverprocess.communicate(input=bytes('stop\n', "UTF-8"))[0]
             if self.serverprocess.poll() != 0:
-                raise OperationFailedExcepion({"operation":"stop", "cause":"badexit"])
+                raise OperationFailedExcepion({"operation":"stop", "cause":"badexit"})
             self.started = 0
 
 if __name__ == "__main__":
