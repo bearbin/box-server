@@ -17,7 +17,7 @@ class Server():
 
     def start(self):
         """Starts the server."""
-        self.logfile = open(os.path.join(self.location, "supahlog3k"), 'Urw')
+        self.logfile = open(os.path.join(self.location, "supahlog3k"), 'a')
         if self.started == 1:
             raise OperationFailedError({"operation":"start", "cause":"alreadystarted", "details":None})
         else:
@@ -43,6 +43,3 @@ class Server():
         else:
             self.serverprocess.stdin.write(bytes(args+"\n", "UTF-8"))
             self.serverprocess.stdin.flush()
-
-if __name__ == "__main__":
-    print("This is the MCServer module for box-server. DERP")
