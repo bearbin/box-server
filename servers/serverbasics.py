@@ -2,5 +2,5 @@
 
 # Code start
 
-class OperationFailedException(Exception):
+class OperationFailedError(Exception):
     pass

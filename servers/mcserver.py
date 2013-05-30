@@ -17,7 +17,7 @@ class Server():
     def start(self):
         """Starts the server."""
         if self.started == 1:
-            raise OperationFailedExcepion({"operation":"start", "cause":"alreadystarted"})
+            raise OperationFailedError({"operation":"start", "cause":"alreadystarted", "details":None})
         else:
             self.serverprocess = subprocess.Popen([self.filename], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
             self.started = 1
@@ -30,8 +30,14 @@ class Server():
         else:
             output = self.serverprocess.communicate(input=bytes('stop\n', "UTF-8"))[0]
             if self.serverprocess.poll() != 0:
-                raise OperationFailedExcepion({"operation":"stop", "cause":"badexit"})
+                raise OperationFailedError({"operation":"stop", "cause":"badexit", "details":None})
             self.started = 0
+
+    def runcommand(self, args):
+        """Runs the command 'args'."""
+        if self.started == 0:
+            raise OperationFailedError({"operation":"runcommand", "cause":"notstarted", "details":None})
+        else:
 
 if __name__ == "__main__":
     print("This is the MCServer module for box-server. DERP")
