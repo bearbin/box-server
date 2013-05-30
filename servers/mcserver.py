@@ -38,6 +38,7 @@ class Server():
         if self.started == 0:
             raise OperationFailedError({"operation":"runcommand", "cause":"notstarted", "details":None})
         else:
+            raise NotImplementedError("I can't find a way to implement this yet...")
 
 if __name__ == "__main__":
     print("This is the MCServer module for box-server. DERP")
