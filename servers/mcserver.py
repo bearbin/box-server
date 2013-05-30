@@ -3,37 +3,25 @@
 # Imports
 
 import subprocess
+import os.path
 from serverbasics import OperationFailedError
-import sys
-from threading import Thread
-from queue import Queue, Empty
-
-# Setup code
-
-def enqueue_output(out, queue):
-    for line in iter(out.readline, b''):
-        queue.put(line)
-    out.close()
 
 # Server start code.
 
 class Server():
     """Provides the interface for managing a MCServer server."""
 
-    def __init__(self, filename):
-        self.filename = filename
+    def __init__(self, location):
+        self.location = location
         self.started = 0 # The server is not started quite yet.
 
     def start(self):
         """Starts the server."""
+        self.logfile = open(os.path.join(self.location, "supahlog3k"), 'Urw')
         if self.started == 1:
             raise OperationFailedError({"operation":"start", "cause":"alreadystarted", "details":None})
         else:
-            self.serverprocess = subprocess.Popen([self.filename], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-            self.q = Queue()
-            self.t = Thread(target=enqueue_output, args=(self.serverprocess.stdout, self.q))
-            self.t.daemon = True
-            self.t.start()
+            self.serverprocess = subprocess.Popen([os.path.join(self.location, "MCServer")], stdin=subprocess.PIPE, stdout=self.logfile, stderr=subprocess.STDOUT)
             self.started = 1
             return		
 
@@ -42,7 +30,8 @@ class Server():
         if self.started == 0:
             raise OperationFailedError({"operation":"stop", "cause":"notstarted", "details":None})
         else:
-            output = self.serverprocess.communicate(input=bytes('stop\n', "UTF-8"))[0]
+            self.serverprocess.communicate(input=bytes('stop\n', "UTF-8"))[0]
+            self.logfile.close()
             if self.serverprocess.poll() != 0:
                 raise OperationFailedError({"operation":"stop", "cause":"badexit", "details":None})
             self.started = 0
