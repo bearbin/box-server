@@ -3,7 +3,17 @@
 # Imports
 
 import subprocess
-import serverbasics
+from serverbasics import OperationFailedError
+import sys
+from threading import Thread
+from queue import Queue, Empty
+
+# Setup code
+
+def enqueue_output(out, queue):
+    for line in iter(out.readline, b''):
+        queue.put(line)
+    out.close()
 
 # Server start code.
 
@@ -20,6 +30,10 @@ class Server():
             raise OperationFailedError({"operation":"start", "cause":"alreadystarted", "details":None})
         else:
             self.serverprocess = subprocess.Popen([self.filename], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+            self.q = Queue()
+            self.t = Thread(target=enqueue_output, args=(self.serverprocess.stdout, self.q))
+            self.t.daemon = True
+            self.t.start()
             self.started = 1
             return		
 
