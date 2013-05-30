@@ -40,7 +40,7 @@ class Server():
     def stop(self):
         """Stops the server."""
         if self.started == 0:
-            return
+            raise OperationFailedError({"operation":"stop", "cause":"notstarted", "details":None})
         else:
             output = self.serverprocess.communicate(input=bytes('stop\n', "UTF-8"))[0]
             if self.serverprocess.poll() != 0:
