@@ -42,4 +42,4 @@ class Server():
             raise OperationFailedError({"operation":"runcommand", "cause":"notstarted", "details":None})
         else:
             self.serverprocess.stdin.write(bytes(args+"\n", "UTF-8"))
-            self.serverprocess.stdin.flush()
+            self.serverprocess.stdin.write(bytes("\n", "UTF-8")) # Workaround for strange behaiviour...
