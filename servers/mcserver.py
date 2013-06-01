@@ -43,3 +43,10 @@ class Server():
         else:
             self.serverprocess.stdin.write(bytes(args+"\n", "UTF-8"))
             self.serverprocess.stdin.write(bytes("\n", "UTF-8")) # Workaround for strange behaiviour...
+
+    def check():
+        """Checks to see if the server is still running."""
+        if self.serverprocess.poll() != None:
+            return 1
+        else:
+            return 0
