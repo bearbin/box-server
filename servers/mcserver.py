@@ -17,10 +17,10 @@ class Server():
 
     def start(self):
         """Starts the server."""
-        self.logfile = open(os.path.join(self.location, "supahlog3k"), 'a')
         if self.started == 1:
             raise OperationFailedError({"operation":"start", "cause":"alreadystarted", "details":None})
         else:
+            self.logfile = open(os.path.join(self.location, "supahlog3k"), 'a')
             self.serverprocess = subprocess.Popen([os.path.join(self.location, "MCServer")], stdin=subprocess.PIPE, stdout=self.logfile, stderr=subprocess.STDOUT)
             self.started = 1
             return		
