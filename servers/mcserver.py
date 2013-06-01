@@ -21,7 +21,7 @@ class Server():
             raise OperationFailedError({"operation":"start", "cause":"alreadystarted", "details":None})
         else:
             self.logfile = open(os.path.join(self.location, "supahlog3k"), 'a')
-            self.serverprocess = subprocess.Popen([os.path.join(self.location, "MCServer")], stdin=subprocess.PIPE, stdout=self.logfile, stderr=subprocess.STDOUT)
+            self.serverprocess = subprocess.Popen(["cd "+self.location+"; ./MCServer")], shell=True, stdin=subprocess.PIPE, stdout=self.logfile, stderr=subprocess.STDOUT)
             self.started = 1
             return		
 
