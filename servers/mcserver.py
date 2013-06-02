@@ -4,23 +4,22 @@
 
 import subprocess
 import os.path
-from serverbasics import OperationFailedError
+from os import remove
+import serverbasics
+
+OperationFailedError = serverbasics.OperationFailedError
 
 # Server start code.
 
-class Server():
+class Server(serverbasics.Server):
     """Provides the interface for managing a MCServer server."""
-
-    def __init__(self, location):
-        self.location = location
-        self.started = 0 # The server is not started quite yet.
 
     def start(self):
         """Starts the server."""
         if self.started == 1:
             raise OperationFailedError({"operation":"start", "cause":"alreadystarted", "details":None})
         else:
-            self.logfile = open(os.path.join(self.location, "supahlog3k"), 'a')
+            self.logfile = open(os.path.join(self.location, ".boxservertemplog"), 'w')
             self.serverprocess = subprocess.Popen(["cd "+self.location+"; ./MCServer"], shell=True, stdin=subprocess.PIPE, stdout=self.logfile, stderr=subprocess.STDOUT)
             self.started = 1
             return		
@@ -31,10 +30,13 @@ class Server():
             raise OperationFailedError({"operation":"stop", "cause":"notstarted", "details":None})
         else:
             self.serverprocess.communicate(input=bytes('stop\n', "UTF-8"))[0]
+            self.started = 0
             self.logfile.close()
+            os.remove(os.path.join(self.location, ".boxservertemplog"))
+            if self.rotatelogs == 1:
+                self.rotatelogs()
             if self.serverprocess.poll() != 0:
                 raise OperationFailedError({"operation":"stop", "cause":"badexit", "details":None})
-            self.started = 0
 
     def runcommand(self, args):
         """Runs the command 'args'."""
@@ -50,3 +52,7 @@ class Server():
             return 1
         else:
             return 0
+
+    def rotatelogs():
+        """Rotate all those pesky logs the server has been generating."""
+        return # doesn't do anything yet
